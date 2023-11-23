@@ -1,0 +1,16 @@
+#toast-container {
+    z-index: 9999;
+}
+
+.toast {
+    max-width: 300px;
+}
+
+/* Màu nền và text của toast */
+.bg-success {
+    background-color: #d4edda !important;
+}
+
+.text-light {
+    color: #155724 !important;
+}

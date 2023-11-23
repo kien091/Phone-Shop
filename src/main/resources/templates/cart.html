@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+        lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Phone Cart</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Your Custom Styles -->
+    <link href="/css/cart.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="card">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                    <div class="col align-self-center text-right text-muted" th:text="${phoneInCarts.size()} + ' items'"></div>
+                </div>
+            </div>
+
+            <div th:each="phoneInCart : ${phoneInCarts}">
+                <div class="row border-top border-bottom">
+                    <div class="row main align-items-center">
+                        <div class="col-2">
+                            <img th:src="${phoneInCart.phone.image}" class="img-fluid"
+                                 alt="Phone Image">
+                        </div>
+                        <div class="col">
+                            <div class="row text-muted" th:text="${phoneInCart.phone.name}"></div>
+                            <div class="row" th:text="${phoneInCart.phone.description}"></div>
+                        </div>
+                        <div class="col">
+                            <a th:href="@{/cart/minus(id=${phoneInCart.phone.id})}">-</a>
+                            <a class="border" th:text="${phoneInCart.quantity}"></a>
+                            <a th:href="@{/cart/add(id=${phoneInCart.phone.id})}">+</a>
+                        </div>
+                        <div class="col">
+                            <span th:text="${#numbers.formatDecimal(phoneInCart.quantity * phoneInCart.phone.price, 0, 'POINT', 0, 'POINT')} + '₫'"></span>
+                            <span class="close">
+                                <a th:href="@{/cart/cancel(id=${phoneInCart.phone.id})}">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-to-shop" th:style="${phoneInCarts.size() > 3} ? '' : 'position: absolute; bottom: 0; left: 0; margin-bottom: 20px; margin-left: 20px;'">
+                <a style="cursor: pointer" th:href="@{/cart/back}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="text-muted">Back to shop</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4 summary">
+            <div><h5><b>Summary</b></h5></div>
+            <hr>
+            <div class="row">
+                <div class="col" style="padding-left:0;" th:text="'ITEMS ' + ${phoneInCarts.size()}"></div>
+                <div class="col text-right" th:text="${#numbers.formatDecimal(totalPrice, 0, 'POINT', 0, 'POINT')} + '₫'"></div>
+            </div>
+            <form>
+                <p>SHIPPING</p>
+                <label>
+                    <select id="deliveryPrice">
+                        <option class="text-muted" th:value="${fastDelivery}"
+                                th:text="'Fast Delivery - ' + ${#numbers.formatDecimal(fastDelivery, 0, 'POINT', 0, 'POINT')} + '₫'"></option>
+                        <option class="text-muted" th:value="${standardDelivery}"
+                                th:text="'Standard Delivery - ' + ${#numbers.formatDecimal(standardDelivery, 0, 'POINT', 0, 'POINT')} + '₫'"></option>
+                    </select>
+                </label>
+                <p>GIVE CODE</p>
+                <label for="code">
+                    <input id="code" placeholder="Enter your code">
+                </label>
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <input id="totalPrice" th:value="${totalPrice}" type="hidden"/>
+                <div class="col text-right" id="newTotalPrice"
+                     th:text="${#numbers.formatDecimal(fastDelivery + totalPrice, 0, 'POINT', 0, 'POINT')} + '₫'"></div>
+            </div>
+            <a type="button" class="btn" th:href="@{/cart/pay}">CHECKOUT</a>
+        </div>
+    </div>
+
+</div>
+<script>
+    var select = document.getElementById("deliveryPrice");
+    var total = document.getElementById("totalPrice");
+    function updateTotal(){
+        var initTotal = parseInt(total.value);
+        var deliveryPrice = parseInt(select.value);
+        var newTotal = initTotal + deliveryPrice;
+        var formattedTotal = newTotal.toLocaleString('vi-VN');
+
+        var newTotalPrice = document.getElementById("newTotalPrice");
+        newTotalPrice.textContent = formattedTotal + "₫";
+    }
+
+    select.addEventListener("change", updateTotal)
+</script>
+</body>
+
+</html>

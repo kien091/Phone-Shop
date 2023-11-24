@@ -44,4 +44,8 @@ public class PhoneService {
         if(phoneRepository.findById(phone.getId()).orElse(null) != null)
             phoneRepository.delete(phone);
     }
+
+    public List<Phone> findAllBySearch(String search){
+        return phoneRepository.findAllBySearch(search);
+    }
 }

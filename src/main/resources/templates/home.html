@@ -45,8 +45,9 @@
                     </ul>
 
                     <div class="d-flex ms-auto me-auto">
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" size="45">
+                        <form class="d-flex" method="post" th:action="@{/home}">
+                            <input class="form-control me-2" type="search" placeholder="Search"
+                                   aria-label="Search" size="45" name="search" id="search">
                             <button class="btn btn-outline-dark" type="submit">
                                 <i class="bi-search"></i>
                             </button>

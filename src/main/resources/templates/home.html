@@ -36,7 +36,7 @@
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">All Phones</a></li>
+                                <li><a class="dropdown-item" th:href="@{/home}">All Phones</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="#">Popular Phones</a></li>
                                 <li><a class="dropdown-item" href="#">New Phones</a></li>
@@ -47,12 +47,28 @@
                     <div class="d-flex ms-auto me-auto">
                         <form class="d-flex" method="post" th:action="@{/home}">
                             <input class="form-control me-2" type="search" placeholder="Search"
-                                   aria-label="Search" size="45" name="search" id="search">
+                                   aria-label="Search" size="30" name="search" id="search">
                             <button class="btn btn-outline-dark" type="submit">
                                 <i class="bi-search"></i>
                             </button>
                         </form>
                     </div>
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="sortDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Sort</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" th:href="@{/home/price}">Price</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" th:href="@{/home/memory}">Memory</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" th:href="@{/home/name}">Name</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" th:href="@{/home/color}">Color</a></li>
+                            </ul>
+                        </li>
+                    </ul>
 
                     <form class="d-flex" method="post" th:action="@{/cart}">
                         <button class="btn btn-outline-dark" type="submit">
@@ -62,7 +78,7 @@
                         </button>
                     </form>
 
-                    <li class="nav-item dropdown" style="list-style-type: none; margin-left: 10px">
+                    <li class="nav-item dropdown" style="list-style-type: none; margin-left: 20px">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                             style="cursor: pointer">
                             <img src="/images/avatar.png" alt="Avatar" style="height: 36px; width: 36px; border-radius: 50%;">
@@ -71,7 +87,7 @@
                             <a class="dropdown-item">Profile</a>
                             <hr class="dropdown-divider">
                             <li>
-                                <form method="post" th:action="@{/logout}">
+                                <form method="post" th:action="@{/home/logout}">
                                     <button class="dropdown-item" type="submit">Sign Out</button>
                                 </form>
                             </li>

@@ -48,4 +48,19 @@ public class PhoneService {
     public List<Phone> findAllBySearch(String search){
         return phoneRepository.findAllBySearch(search);
     }
+
+    public List<Phone> findAllByPriceDesc(){
+        return phoneRepository.findAllByPriceDesc();
+    }
+
+    public List<Phone> findAllByMemoryDesc(){
+        return phoneRepository.findAllByMemoryDesc();
+    }
+
+    public List<Phone> findAllByNameAsc(){
+        return phoneRepository.findAllByNameAsc();
+    }
+    public List<Phone> findAllByColorAsc(){
+        return phoneRepository.findAllByColorAsc();
+    }
 }

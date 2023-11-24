@@ -1,30 +1,43 @@
 package Source.Controllers;
 
+import Source.Models.User;
 import Source.Services.CartService;
 import Source.Services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/")
 public class SignInController {
     private final UserService userService;
-    private final CartService cartService;
 
-    public SignInController(UserService userService, CartService cartService) {
+    public SignInController(UserService userService) {
         this.userService = userService;
-        this.cartService = cartService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String viewSignIn(){
+    public String viewSignIn(Model model){
         return "signIn";
     }
 
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public String SignIn(Model model){
-        return null;
+    public String SignIn(@RequestParam("username") String username,
+                         @RequestParam("password") String password,
+                         Model model, RedirectAttributes redirectAttributes){
+        User user = userService.findByUsername(username);
+        if(user == null){
+            model.addAttribute("usernameError", "Username is not exist!");
+            return viewSignIn(model);
+        } else if (!user.getPassword().equals(password)) {
+            model.addAttribute("passwordError", "Wrong password!");
+            return viewSignIn(model);
+        }
+
+        redirectAttributes.addFlashAttribute("flashMessage", "Welcome back!");
+        return "redirect:/home";
     }
 }

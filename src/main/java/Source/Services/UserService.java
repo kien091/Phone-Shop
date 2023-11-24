@@ -47,4 +47,13 @@ public class UserService {
         }
         return false;
     }
+
+    public User findByUsername(String username){
+        for(User user: userRepository.findAll()){
+            if(user.getUsername().equals(username)){
+                return user;
+            }
+        }
+        return null;
+    }
 }

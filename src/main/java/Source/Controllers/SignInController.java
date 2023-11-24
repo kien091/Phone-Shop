@@ -1,7 +1,6 @@
 package Source.Controllers;
 
 import Source.Models.User;
-import Source.Services.CartService;
 import Source.Services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

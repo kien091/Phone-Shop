@@ -28,5 +28,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // another method with Crud
+    public boolean checkIfExistUsername(String username){
+        List<User> users = userRepository.findAll();
+        for(User user: users){
+            if(user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIfExistEmail(String email){
+        List<User> users = userRepository.findAll();
+        for(User user: users){
+            if(user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

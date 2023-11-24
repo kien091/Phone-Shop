@@ -45,14 +45,14 @@
                             <div class="row" th:text="${phoneInCart.phone.description}"></div>
                         </div>
                         <div class="col">
-                            <a th:href="@{/cart/minus(id=${phoneInCart.phone.id})}">-</a>
+                            <a th:href="@{/cart/minus(id=${phoneInCart.id})}">-</a>
                             <a class="border" th:text="${phoneInCart.quantity}"></a>
-                            <a th:href="@{/cart/add(id=${phoneInCart.phone.id})}">+</a>
+                            <a th:href="@{/cart/add(id=${phoneInCart.id})}">+</a>
                         </div>
                         <div class="col">
                             <span th:text="${#numbers.formatDecimal(phoneInCart.quantity * phoneInCart.phone.price, 0, 'POINT', 0, 'POINT')} + '₫'"></span>
                             <span class="close">
-                                <a th:href="@{/cart/cancel(id=${phoneInCart.phone.id})}">
+                                <a th:href="@{/cart/cancel(id=${phoneInCart.id})}">
                                     <i class="fa-solid fa-xmark"></i>
                                 </a>
                             </span>

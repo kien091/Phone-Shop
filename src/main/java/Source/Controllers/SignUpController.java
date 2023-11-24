@@ -3,6 +3,7 @@ package Source.Controllers;
 import Source.Models.Cart;
 import Source.Models.User;
 import Source.Services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,8 @@ public class SignUpController {
                          @RequestParam("email") String email,
                          @RequestParam("password") String password,
                          @RequestParam("re_pass") String re_pass,
-                         Model model, RedirectAttributes redirectAttributes){
+                         Model model, HttpSession session,
+                         RedirectAttributes redirectAttributes){
         if(userService.checkIfExistUsername(name)){
             model.addAttribute("usernameError", "Username is already exist!");
             return viewSignUp(model);
@@ -44,6 +46,7 @@ public class SignUpController {
         User user = new User(0, name, email, password, false, new Cart());
         userService.save(user);
 
+        session.setAttribute("user", user);
         redirectAttributes.addFlashAttribute("flashMessage", "Welcome!");
         return "redirect:/home";
     }

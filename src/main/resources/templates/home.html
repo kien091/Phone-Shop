@@ -46,7 +46,7 @@
 
                     <div class="d-flex ms-auto me-auto">
                         <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" size="50">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" size="45">
                             <button class="btn btn-outline-dark" type="submit">
                                 <i class="bi-search"></i>
                             </button>
@@ -60,6 +60,22 @@
                             <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${numInCart}"></span>
                         </button>
                     </form>
+
+                    <li class="nav-item dropdown" style="list-style-type: none; margin-left: 10px">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="cursor: pointer">
+                            <img src="/images/avatar.png" alt="Avatar" style="height: 36px; width: 36px; border-radius: 50%;">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item">Profile</a>
+                            <hr class="dropdown-divider">
+                            <li>
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="dropdown-item" type="submit">Sign Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                 </div>
             </div>
         </nav>

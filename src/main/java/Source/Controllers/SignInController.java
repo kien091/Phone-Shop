@@ -2,6 +2,7 @@ package Source.Controllers;
 
 import Source.Models.User;
 import Source.Services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,11 @@ public class SignInController {
         return "signIn";
     }
 
-    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    @RequestMapping(value = "signIn", method = RequestMethod.POST)
     public String SignIn(@RequestParam("username") String username,
                          @RequestParam("password") String password,
-                         Model model, RedirectAttributes redirectAttributes){
+                         Model model, HttpSession session,
+                         RedirectAttributes redirectAttributes){
         User user = userService.findByUsername(username);
         if(user == null){
             model.addAttribute("usernameError", "Username is not exist!");
@@ -36,6 +38,7 @@ public class SignInController {
             return viewSignIn(model);
         }
 
+        session.setAttribute("user", user);
         redirectAttributes.addFlashAttribute("flashMessage", "Welcome back!");
         return "redirect:/home";
     }

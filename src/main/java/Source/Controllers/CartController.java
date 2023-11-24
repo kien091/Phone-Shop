@@ -1,9 +1,12 @@
 package Source.Controllers;
 
 import Source.Models.PhoneInCart;
+import Source.Models.User;
 import Source.Services.CartService;
 import Source.Services.PhoneInCartService;
 import Source.Services.PhoneService;
+import Source.Services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +26,21 @@ public class CartController {
 
     private final CartService cartService;
 
-    public CartController(PhoneInCartService phoneInCartService, PhoneService phoneService, CartService cartService) {
+    public CartController(PhoneInCartService phoneInCartService, PhoneService phoneService,
+                          CartService cartService) {
         this.phoneInCartService = phoneInCartService;
         this.phoneService = phoneService;
         this.cartService = cartService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String viewCart(Model model){
-        List<PhoneInCart> phoneInCarts = phoneInCartService.findAll();
+    public String viewCart(Model model, HttpSession session){
+        User user = (User) session.getAttribute("user");
+
+        if(user == null)
+            return "redirect:/";
+
+        List<PhoneInCart> phoneInCarts = phoneInCartService.findAllByIdCart(user.getCart().getId());
         model.addAttribute("phoneInCarts", phoneInCarts);
 
         int totalPrice = phoneInCarts
@@ -53,13 +62,16 @@ public class CartController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addToCart(@RequestParam("id") int id, RedirectAttributes redirectAttributes){
-        PhoneInCart phone = phoneInCartService.findByIdPhone(id);
+    public String addToCart(@RequestParam("id") int id, HttpSession session,
+                            RedirectAttributes redirectAttributes){
+        User user = (User) session.getAttribute("user");
+
+        PhoneInCart phone = phoneInCartService.findByIdCartAndIdPhone(user.getCart().getId(), id);
         if(phone != null){
             phone.setQuantity(phone.getQuantity() + 1);
             phoneInCartService.update(phone);
         }else{
-            phone = new PhoneInCart(0, phoneService.findById(id), cartService.findById(1), 1);
+            phone = new PhoneInCart(0, phoneService.findById(id), cartService.findById(user.getCart().getId()), 1);
             phoneInCartService.save(phone);
         }
 
@@ -69,8 +81,9 @@ public class CartController {
     }
 
     @RequestMapping(value = "/minus", method = RequestMethod.GET)
-    public String minusInCart(@RequestParam("id") int id, Model model){
-        PhoneInCart phone = phoneInCartService.findByIdPhone(id);
+    public String minusInCart(@RequestParam("id") int id, Model model,
+                              HttpSession session){
+        PhoneInCart phone = phoneInCartService.findById(id);
         if(phone.getQuantity() > 1){
             phone.setQuantity(phone.getQuantity() - 1);
             phoneInCartService.update(phone);
@@ -78,22 +91,24 @@ public class CartController {
             phoneInCartService.delete(phone);
         }
 
-        return viewCart(model);
+        return viewCart(model, session);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addInAdd(@RequestParam("id") int id, Model model){
-        PhoneInCart phone = phoneInCartService.findByIdPhone(id);
+    public String addInAdd(@RequestParam("id") int id, Model model,
+                           HttpSession session){
+        PhoneInCart phone = phoneInCartService.findById(id);
         phone.setQuantity(phone.getQuantity() + 1);
         phoneInCartService.update(phone);
-        return viewCart(model);
+        return viewCart(model, session);
     }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.GET)
-    public String cancelInCart(@RequestParam("id") int id, Model model){
-        PhoneInCart phone = phoneInCartService.findByIdPhone(id);
+    public String cancelInCart(@RequestParam("id") int id, Model model,
+                               HttpSession session){
+        PhoneInCart phone = phoneInCartService.findById(id);
         phoneInCartService.delete(phone);
-        return viewCart(model);
+        return viewCart(model, session);
     }
 
     @RequestMapping(value = "/back", method = RequestMethod.GET)
@@ -102,8 +117,11 @@ public class CartController {
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    public String payment(RedirectAttributes redirectAttributes){
-        phoneInCartService.deleteAll();
+    public String payment(RedirectAttributes redirectAttributes,
+                          HttpSession session){
+        User user = (User) session.getAttribute("user");
+
+        phoneInCartService.deleteAllByIdCart(user.getCart().getId());
 
         redirectAttributes.addFlashAttribute("flashMessage", "Thanh toán thành công!");
         return "redirect:/home";

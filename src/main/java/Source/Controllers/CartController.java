@@ -65,7 +65,7 @@ public class CartController {
 
         redirectAttributes.addFlashAttribute("flashMessage", "Thêm vào giỏ hàng thành công!");
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @RequestMapping(value = "/minus", method = RequestMethod.GET)
@@ -98,7 +98,7 @@ public class CartController {
 
     @RequestMapping(value = "/back", method = RequestMethod.GET)
     public String backToHome(){
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
@@ -106,6 +106,6 @@ public class CartController {
         phoneInCartService.deleteAll();
 
         redirectAttributes.addFlashAttribute("flashMessage", "Thanh toán thành công!");
-        return "redirect:/";
+        return "redirect:/home";
     }
 }

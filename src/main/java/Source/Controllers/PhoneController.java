@@ -19,7 +19,7 @@ public class PhoneController {
     @Autowired
     private PhoneInCartService phoneInCartService;
 
-    @RequestMapping("")
+    @RequestMapping("/home")
     public String home(Model model){
         List<Phone> phones = phoneService.findAll();
         int numInCart = phoneInCartService.findAll().size();
